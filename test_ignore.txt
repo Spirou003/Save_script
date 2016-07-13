@@ -1,0 +1,1 @@
+dir/dir3/test_ignore/dossier_a_copier/dossier_a_pas_copier
