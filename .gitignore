@@ -1,0 +1,9 @@
+out_*.txt
+update_err.txt
+old/
+new/
+*.pyc
+dstdir.txt
+srcdir.txt
+list.txt
+ignore.txt
