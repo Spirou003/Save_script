@@ -37,9 +37,13 @@ def check(srcdir, dstdir):
                 if (os.path.isdir(dstdir+os.sep+srcfile)):
                     listerr.append(srcfilename)
                 else:
-                    oold = os.path.getmtime(srcfilename)
-                    onew = os.path.getmtime(dstdir+os.sep+srcfile)
-                    if (oold - onew > 0.5):
+                    stold = os.stat(srcfilename)
+                    stnew = os.stat(dstdir+os.sep+srcfile)
+                    oold = stold.st_mtime
+                    onew = stnew.st_mtime
+                    sold = stold.st_size
+                    snew = stnew.st_size
+                    if (oold - onew > 0.5 or sold != snew):
                         listold.append(srcfilename)
             dstlist.remove(srcfile)
         else:

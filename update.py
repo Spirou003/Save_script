@@ -3,7 +3,6 @@
 """
 Todo:
 - bug d'interruption de copie (os.stat(path).st_size et os.stat(filename).st_mtime)
-- creer un depot github
 """
 
 import shutil
