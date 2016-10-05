@@ -10,11 +10,11 @@ def recover(dir):
             os.remove(dir)
     shutil.copytree(dir+" - Copie", dir)
 #
-recover("new")
-recover("old")
+recover("disk/new")
+recover("disk/old")
 
 if (len(sys.argv) >= 2):
-    file = open("old/dir/dir3/long_fichier.txt", "w+")
+    file = open("disk/old/dir/dir3/long_fichier.txt", "w+")
     i = 0
     while (i < 150000000):
         file.write(str(i)+"\n")

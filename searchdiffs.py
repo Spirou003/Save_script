@@ -6,6 +6,11 @@ import sys
 
 import file
 
+profilename = "default"
+if (len(sys.argv) >= 2):
+    profilename = sys.argv[1]
+#
+
 def check(srcdir, dstdir):
     global N
     global sum
@@ -52,10 +57,13 @@ def check(srcdir, dstdir):
         listdel.append(srcdir+os.sep+dstfile)
     return (listold, listnew, listdel, listerr)
 #
-srcdir = file.getsrcdir()
-dstdir = file.getdstdir()
-listdir = file.getlistdir()
-ignore = file.getignore(srcdir)
+if (not file.profilefound(profilename)):
+    raise Exception("Profile not found: "+profilename)
+#
+srcdir = file.getsrcdir(profilename)
+dstdir = file.getdstdir(profilename)
+listdir = file.getlistdir(profilename)
+ignore = file.getignore(profilename, srcdir)
 
 print "   --- "+srcdir
 print "   --- "+dstdir
@@ -96,19 +104,19 @@ for el in listdel:
 print "\n  Fichiers erreur:"
 for el in listerr:
     print "    "+el
-out = open("out_modified.txt", "w+")
+out = open(file.getprofiledir(profilename)+"out_modified.txt", "w+")
 for el in listold:
     out.write(el+"\n")
 out.close()
-out = open("out_new.txt", "w+")
+out = open(file.getprofiledir(profilename)+"out_new.txt", "w+")
 for el in listnew:
     out.write(el+"\n")
 out.close()
-out = open("out_delete.txt", "w+")
+out = open(file.getprofiledir(profilename)+"out_delete.txt", "w+")
 for el in listdel:
     out.write(el+"\n")
 out.close()
-out = open("out_err.txt", "w+")
+out = open(file.getprofiledir(profilename)+"out_err.txt", "w+")
 for el in listerr:
     out.write(el+"\n")
 out.close()

@@ -12,17 +12,22 @@ import sys
 
 import file
 
-srcdir = file.getsrcdir()
-dstdir = file.getdstdir()
-ignore = file.getignore(srcdir)
+profilename = "default"
+if (len(sys.argv) >= 2):
+    profilename = sys.argv[1]
+#
 
-errorfile = open("update_err.txt", "w+")
+srcdir = file.getsrcdir(profilename)
+dstdir = file.getdstdir(profilename)
+ignore = file.getignore(profilename, srcdir)
+
+errorfile = open(file.getprofiledir(profilename)+"update_err.txt", "w+")
 
 def print_error(string, filename):
     global errorfile
     print string+filename+"   "+str(sys.exc_info()[1])
     errorfile.write(string+filename+"   "+str(sys.exc_info()[1])+"\n")
-
+#
 def callback_ignore(dir, files):
     global ignore
     list = []
@@ -32,8 +37,8 @@ def callback_ignore(dir, files):
     return list
 #
 
-file = open("out_new.txt", "r")
-for filenames in file:
+fnew = open(file.getprofiledir(profilename)+"out_new.txt", "r")
+for filenames in fnew:
     filename = filenames.strip()
     if (filename in ignore):
         continue
@@ -47,9 +52,9 @@ for filenames in file:
             shutil.copy(filename, filename.replace(srcdir, dstdir))
         except Exception, e:
             print_error("file: ", filename)
-file.close()
-file = open("out_modified.txt", "r")
-for filenames in file:
+fnew.close()
+fmod = open(file.getprofiledir(profilename)+"out_modified.txt", "r")
+for filenames in fmod:
     filename = filenames.strip()
     if (filename in ignore):
         continue
@@ -63,9 +68,9 @@ for filenames in file:
             shutil.copy(filename, filename.replace(srcdir, dstdir))
         except Exception, e:
             print_error("file: ", filename)
-file.close()
-file = open("out_delete.txt", "r")
-for filenames in file:
+fmod.close()
+fdel = open(file.getprofiledir(profilename)+"out_delete.txt", "r")
+for filenames in fdel:
     filename = filenames.strip()
     if (os.path.isdir(filename.replace(srcdir, dstdir))):
         try:
@@ -77,7 +82,7 @@ for filenames in file:
             os.remove(filename.replace(srcdir, dstdir))
         except Exception, e:
             print_error("file: ", filename)
-file.close()
+fdel.close()
 
 errorfile.close()
 
